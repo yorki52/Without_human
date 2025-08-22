@@ -146,15 +146,14 @@ get_ipython().system('mkdir filt')
 
 # In[13]:
 
-
-cp *filtered.bracken filt/
+F = get_ipython().getoutput('pwd')
+F = F[0] + "/filt"
+!cp *filtered.bracken F
 
 
 # In[14]:
 
 
-F = get_ipython().getoutput('pwd')
-F = F[0] + "/filt"
 os.chdir(F)
 
 

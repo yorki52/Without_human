@@ -7,6 +7,7 @@ The main steps include:
 1. **Environment setup**:  
    Before running, it is necessary to download and install the required libraries and tools — **Kraken2, KrakenTools, SPAdes, Bracken** — as well as download the Kraken database (for example, the standard k2 database, approximately 8 GB). These steps are commented out at the beginning of the notebook for convenience.
 
+"Just launch **install_depend.py** for installing"
    
 
 3. **Downloading and preparing the Kraken database**:  

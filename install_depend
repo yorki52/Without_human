@@ -1,11 +1,29 @@
-***будет автоматически скачана база данных кракена (около 6гб), распакована и удален исходник***
-
+import os
 import requests
 from tqdm import tqdm
 import tarfile
-import os
 
-# URL файла
+# --- Установка необходимых инструментов ---
+
+# Клонирование репозиториев Kraken2, KrakenTools, SPAdes и Bracken
+os.system('git clone https://github.com/DerrickWood/kraken2.git')
+os.system('git clone https://github.com/jenniferlu717/KrakenTools.git')
+os.system('git clone https://github.com/ablab/spades.git')
+os.system('git clone https://github.com/jenniferlu717/Bracken.git')
+
+# Установка через conda (предполагается, что conda уже установлен)
+# Обратите внимание: команда 'conda install' внутри скрипта может требовать активации окружения.
+# Лучше создать отдельное окружение и активировать его перед запуском скрипта.
+os.system('conda install -c bioconda bracken -y')
+os.system('conda install -c bioconda kraken2 -y')
+
+# Установка Python-библиотек requests и tqdm
+os.system('pip install requests tqdm')
+
+
+# --- Скачивание базы данных Kraken ---
+
+# URL файла базы данных
 url = "https://genome-idx.s3.amazonaws.com/kraken/k2_standard_08_GB_20250714.tar.gz"
 
 # Имя файла для сохранения
@@ -27,7 +45,8 @@ def download_with_progress(url, filename):
     else:
         print(f"Файл сохранен как {filename}")
 
-# Скачиваем файл
+# Скачиваем файл базы данных
+print("Скачивание базы данных Kraken...")
 download_with_progress(url, local_filename)
 
 # Распаковка архива

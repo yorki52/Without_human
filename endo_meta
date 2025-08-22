@@ -17,11 +17,7 @@
 # !pip install requests tqdm
 
 
-# In[2]:
-
-
 # ###будет автоматически скачана база данных кракена (около 6гб), распакована и удален исходник. 
-
 
 # import requests
 # from tqdm import tqdm
@@ -64,21 +60,12 @@
 # print(f"Удален архив {local_filename}")
 
 
-# In[3]:
 
 
 N = get_ipython().getoutput('pwd ## имя рабочей машины')
-N
-
-
-# In[4]:
-
 
 kraken2_db = N[0] + "/Downloads/k2_standard_08gb_20250402/"
 ##установленная база данных для KRAKEN2
-
-
-# In[5]:
 
 
 import os

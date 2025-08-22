@@ -8,7 +8,7 @@ import tarfile
 # Клонирование репозиториев Kraken2, KrakenTools, SPAdes и Bracken
 os.system('git clone https://github.com/DerrickWood/kraken2.git')
 os.system('git clone https://github.com/jenniferlu717/KrakenTools.git')
-os.system('git clone https://github.com/ablab/spades.git')
+#os.system('git clone https://github.com/ablab/spades.git')
 os.system('git clone https://github.com/jenniferlu717/Bracken.git')
 
 # Установка через conda (предполагается, что conda уже установлен)

@@ -6,7 +6,7 @@ import glob
 import subprocess
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import shutil
 
 N = get_ipython().getoutput('pwd ## имя рабочей машины')
 
@@ -67,15 +67,16 @@ print("Обработка завершена.")
 fold_rep =  output_dir + "/kraken_reports"
 os.chdir(fold_rep)
 
+# Создаем резервную копию репортов перед объединением
+backup_dir = os.path.join(output_dir, "kraken_reports_backup")
+os.makedirs(backup_dir, exist_ok=True)
 
 #для групп надо комбинировать репорты c помщью combine_kreports
 comb = N[0]  + "/KrakenTools/combine_kreports.py"
 get_ipython().system('python $comb -r *report.txt -o COMBINED.KREPORT')
 
 
-files = get_ipython().getoutput('ls *COMBINED.KREPORT')
-files
-
+#files = get_ipython().getoutput('ls *COMBINED.KREPORT')
 
 
 ##BRACKEN
@@ -87,7 +88,7 @@ threshold = 10
 
 # Ваши файлы
 files = get_ipython().getoutput('ls *COMBINED.KREPORT')
-files
+
 
 # Уровни таксонов, которые можно использовать
 tax_levels = ["K", "P", "C", "O", "F", "G", "S"]
@@ -108,6 +109,7 @@ for file in files:
         print(f"Запуск: {' '.join(cmd_bracken)}")
         subprocess.run(cmd_bracken, check=True)
         print(f"Обработка файла {file} для уровня {level} завершена.")
+
 
 
 # ##ПОИСК И УДАЛЕНИЕ ДАННЫх человеческих айди "9606","9443", "7711","33208","9605","9604","40674"!!!
@@ -138,41 +140,33 @@ for file in files:
         print(f"Ошибка при обработке файла {file}: {e}")
 
 
-# In[12]:
-
-
 get_ipython().system('mkdir filt')
 
 
-# In[13]:
+# Получаем текущий рабочий каталог
+current_dir = os.getcwd()
 
-F = get_ipython().getoutput('pwd')
-F = F[0] + "/filt"
-cp *filtered.bracken F
+# Путь к папке 'filt'
+filt_dir = os.path.join(current_dir, 'filt')
 
+# Создаем папку 'filt', если ее нет
+os.makedirs(filt_dir, exist_ok=True)
 
-# In[14]:
+# Находим все файлы, оканчивающиеся на 'filtered.bracken'
+files_to_copy = glob.glob('*filtered.bracken')
 
-
-os.chdir(F)
-
-
-# In[ ]:
-
-
-
+# Копируем найденные файлы в папку 'filt'
+for file in files_to_copy:
+    shutil.copy(file, filt_dir)
 
 
-# In[15]:
+os.chdir(filt_dir)
 
-
-bukvs = ["O","P", "F", "S", "G"]
-bukvs
+bukvs = ["K", "P", "C", "O", "F", "G", "S"]
 
 for bukva in bukvs:
     print(bukva)
     files = glob.glob("*"+bukva+"_filtered.bracken")  # или укажите конкретные имена
-
     all_samples = pd.DataFrame()
 
     for file in files:
@@ -187,13 +181,8 @@ for bukva in bukvs:
     # Сохраняем итоговую таблицу
     all_samples.to_csv(bukva + '_combined_taxonomic_profiles.csv')
 
-
-# In[16]:
-
-
 # Список файлов для обработки
 files = get_ipython().getoutput('ls *combined_taxonomic_profiles.csv')
-files
 
 # Функция для обработки каждого файла
 def process_file(filename):
@@ -237,11 +226,10 @@ def process_file(filename):
     # plt.title(f'Top 10 in {title_name} (stacked bar 100%)')
 
     plt.legend( bbox_to_anchor=(1.05, 1), loc='upper left')
-
     plt.tight_layout()
 
     # Сохраняем график или показываем
-    output_image = f"{title_name}_top10_stacked_bar.png"
+    output_image = os.path.join(output_dir, f"{title_name}_top10_stacked_bar.png")
     plt.savefig(output_image)
     print(f"График сохранен как {output_image}")
     plt.show()
@@ -250,4 +238,3 @@ def process_file(filename):
 # Обработка всех файлов
 for file in files:
     process_file(file)
-

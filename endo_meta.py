@@ -1,25 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
-##Before analysing we need download libraries from GIT: kraken2, krakentools and spades (assembler)
-# and we need download database for kraken ("k2 8gb is enought") link: https://benlangmead.github.io/aws-indexes/k2
-
-###Dependencies:
-#!git clone https://github.com/DerrickWood/kraken2.git
-#!git clone https://github.com/jenniferlu717/KrakenTools.git
-#!git clone https://github.com/ablab/spades.git
-#!git clone https://github.com/jenniferlu717/Bracken.git
-# !conda install bioconda::bracken -y
-# !conda install kraken2 -y
-# !pip install requests tqdm
-
-
-
-
-
+import os
+import glob
+import subprocess
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 N = get_ipython().getoutput('pwd ## имя рабочей машины')
@@ -27,12 +13,6 @@ N = get_ipython().getoutput('pwd ## имя рабочей машины')
 kraken2_db = N[0] + "/Downloads/k2_standard_08gb_20250402/"
 ##установленная база данных для KRAKEN2
 
-
-import os
-import glob
-import subprocess
-import pandas as pd
-import matplotlib.pyplot as plt
 
 # Пути
 fastq_dir = N[0]  + '/Downloads/250730/new/'
@@ -84,14 +64,8 @@ for r1_path in r1_files:
 print("Обработка завершена.")
 
 
-# In[6]:
-
-
 fold_rep =  output_dir + "/kraken_reports"
 os.chdir(fold_rep)
-
-
-# In[7]:
 
 
 #для групп надо комбинировать репорты c помщью combine_kreports
@@ -99,24 +73,12 @@ comb = N[0]  + "/KrakenTools/combine_kreports.py"
 get_ipython().system('python $comb -r *report.txt -o COMBINED.KREPORT')
 
 
-# In[8]:
-
-
 files = get_ipython().getoutput('ls *COMBINED.KREPORT')
 files
 
 
-# In[9]:
-
-
-pwd
-
-
-# In[10]:
-
 
 ##BRACKEN
-
 
 # Настройки
 krona_db = kraken2_db
@@ -148,20 +110,13 @@ for file in files:
         print(f"Обработка файла {file} для уровня {level} завершена.")
 
 
-# In[11]:
-
-
 # ##ПОИСК И УДАЛЕНИЕ ДАННЫх человеческих айди "9606","9443", "7711","33208","9605","9604","40674"!!!
-
 
 # Путь к вашему скрипту фильтрации
 script_path = N[0] + "/KrakenTools/filter_bracken.out.py"
 
-
 files = get_ipython().getoutput('ls *.bracken                         # Ваши файлы с разными уровнями таксонов')
 files
-
-
 
 # Обработка каждого файла
 for file in files:

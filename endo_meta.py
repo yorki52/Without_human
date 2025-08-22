@@ -148,7 +148,7 @@ get_ipython().system('mkdir filt')
 
 F = get_ipython().getoutput('pwd')
 F = F[0] + "/filt"
-!cp *filtered.bracken F
+cp *filtered.bracken F
 
 
 # In[14]:
